@@ -22,6 +22,7 @@ const movieFilterSlice = createSlice({
       state.Title = action.payload.Title;
       state.year = action.payload.year;
       state.genre = action.payload.genre;
+      state.userRating = action.payload.userRating;
     },
   },
 });

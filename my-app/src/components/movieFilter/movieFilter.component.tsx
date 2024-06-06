@@ -30,17 +30,22 @@ const MovieFilter = () => {
   // const [year, setYear] = useState<Year>(Year.None);
 
   const handleIMDBRating = (value: string) => {
-    if (value === "") value = "0";
-    dispatch(setMovieFilter({ ...movieFilter, imdBstar: parseInt(value) }));
+    dispatch(
+      setMovieFilter({
+        ...movieFilter,
+        imdBstar: value === "" ? undefined : parseInt(value),
+      })
+    );
   };
   const handleUserRating = (value: string) => {
-    dispatch(setMovieFilter({ ...movieFilter, userRating: parseInt(value) }));
+    dispatch(
+      setMovieFilter({
+        ...movieFilter,
+        userRating: value === "" ? undefined : parseInt(value),
+      })
+    );
   };
   const handleGenre = (value: string) => {
-    // const key = Object.keys(Genre).find(
-    //   (key) => Genre[key as keyof typeof Genre] === value
-    // );
-    // console.log("key ", key);
     dispatch(
       setMovieFilter({
         ...movieFilter,
@@ -52,7 +57,7 @@ const MovieFilter = () => {
     dispatch(setMovieFilter({ ...movieFilter, year: value as Year }));
   };
   const searchMovies = () => {
-    console.log("movie filter genre ", movieFilter.genre);
+    console.log("movie filter user rating ", movieFilter.userRating);
     MoviesService.getMovies(movieFilter)
       .then((response) => {
         console.log(response.data);

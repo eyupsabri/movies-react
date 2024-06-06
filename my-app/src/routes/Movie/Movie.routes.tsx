@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
@@ -17,9 +18,14 @@ import { useEffect, useState } from "react";
 import MoviesService from "../../services/MoviesService";
 import { MovieDetailedType } from "../../types/MovieDetailed.type";
 import IconBxlImdb from "../../components/imdbSVG/imdbSVG.component";
-import { Height, Star, Widgets } from "@mui/icons-material";
+import { Add, Height, Star, Widgets } from "@mui/icons-material";
 import { MovieReviewType } from "../../types/MovieReview.type";
 import YouTube from "react-youtube";
+import { MovieReviewAddType } from "../../types/MovieReviewAdd.type";
+import MovieReviewService from "../../services/MovieReviewService";
+import AddMovieReview from "../../components/addMovieReview/addMovieReview.component";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
 
 const Movie = () => {
   const params = useParams<{ movieID: string }>();
@@ -27,7 +33,9 @@ const Movie = () => {
   const theme = useTheme();
   const classes = useStyles(theme);
   const [movie, setMovie] = useState<MovieDetailedType>();
-
+  const authenticated = useSelector<RootState>(
+    (state) => state.auth.authanticated
+  );
   useEffect(() => {
     if (params.movieID) {
       MoviesService.getMovieByID(params.movieID)
@@ -57,6 +65,55 @@ const Movie = () => {
   const getVideoId = (url: string) => {
     const parts = url.split("/embed/");
     return parts.length > 1 ? parts[1] : undefined;
+  };
+
+  // const onClickDeneme = async () => {
+  //   if (params.movieID == undefined) return;
+
+  //   const data: MovieReviewAddType = {
+  //     description:
+  //       "!lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure dolor reprehenderit voluptate velit esse cillum dolore fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident sunt culpa officia deserunt mollit anim id est laborum",
+  //     star: 10,
+  //     title: "Deneme",
+  //     movieID: params.movieID,
+  //     created: new Date(),
+  //   };
+  //   await MovieReviewService.addMovieReview(data)
+  //     .then((response) => {
+  //       console.log("Review added movieleri çekicek");
+  //       return MoviesService.getMovieByID(params.movieID as string);
+  //     })
+  //     .then((response) => {
+  //       setMovie(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error e mi giriyor");
+  //     });
+  // };
+  const onSubmit = async (data: {
+    title: string;
+    review: string;
+    rating: number;
+  }) => {
+    if (params.movieID == undefined) return;
+    const addReview: MovieReviewAddType = {
+      description: data.review,
+      star: data.rating,
+      title: data.title,
+      movieID: params.movieID,
+      created: new Date(),
+    };
+    await MovieReviewService.addMovieReview(addReview)
+      .then((response) => {
+        console.log("Review added movieleri çekicek");
+        return MoviesService.getMovieByID(params.movieID as string);
+      })
+      .then((response) => {
+        setMovie(response.data);
+      })
+      .catch((error) => {
+        console.log("Error e mi giriyor");
+      });
   };
 
   return (
@@ -140,8 +197,8 @@ const Movie = () => {
       </Box>
       <Box sx={{ mt: 5 }}>
         <Typography variant="h5">Reviews</Typography>
-        {movie?.reviews.map((review) => (
-          <Card key={review.userName} sx={{ mt: 1, px: 1 }}>
+        {movie?.reviews.map((review, index) => (
+          <Card key={review.id} sx={{ mt: 1, px: 1 }}>
             <CardContent>
               <Box
                 sx={{
@@ -178,6 +235,8 @@ const Movie = () => {
           </Card>
         ))}
       </Box>
+
+      {authenticated ? <AddMovieReview onSubmit={onSubmit} /> : null}
     </Container>
   );
 };
