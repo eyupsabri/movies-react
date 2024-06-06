@@ -13,7 +13,7 @@ import { AppDispatch, RootState } from "../../state/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthentication } from "../../state/authSlice/authSlice";
 import { useStyles } from "./Login.styles";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const theme = useTheme();
@@ -21,6 +21,7 @@ const Login = () => {
   const authenticated = useSelector<RootState>(
     (state) => state.auth.authanticated
   );
+  const navigate = useNavigate();
   const formMethods = useForm({
     mode: "onSubmit",
     defaultValues: {
@@ -43,6 +44,7 @@ const Login = () => {
         localStorage.setItem("accessToken", res.data.accessToken);
         localStorage.setItem("refreshToken", res.data.refreshToken);
         dispatch(setAuthentication({ authanticated: true }));
+        navigate(-1);
       })
       .catch((err) => {
         console.log(err);
@@ -122,7 +124,7 @@ const Login = () => {
           Login
         </Button>
       </Box>
-      {authenticated ? <Navigate to="/" /> : null}
+      {/* {authenticated ? <Navigate to="/" /> : null} */}
     </Container>
   );
 };
