@@ -15,46 +15,50 @@ import { useTheme } from "@mui/material/styles";
 import { Link, Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
-import useTryLogin from "../../hooks/useTryLogin";
 import useAxiosInterceptor from "../../hooks/useAxiosInterceptor";
 import { useEffect, useState } from "react";
 import { API_INSTANCE } from "../../services/BaseService";
 import { AccountCircleOutlined } from "@mui/icons-material";
 import { setAuthentication } from "../../state/authSlice/authSlice";
+import MyAppBar from "../../components/appBar/appBar.component";
 
 const Navigation = () => {
   const theme = useTheme();
-  const classes = useStyles(theme);
-  const authenticated = useSelector<RootState>(
-    (state) => state.auth.authanticated
-  );
+  // const classes = useStyles(theme);
+  // const authenticated = useSelector<RootState>(
+  //   (state) => state.auth.authanticated
+  // );
   const dispatch = useDispatch<AppDispatch>();
   // useTryLogin();
   useAxiosInterceptor();
   useEffect(() => {
     console.log("Kaç kere request gidiyor ya");
-    API_INSTANCE.get("https://localhost:7209/api/Authentication/IsLoggedIn")
+    API_INSTANCE.get<{ isAdmin: boolean }>(
+      "https://localhost:7209/api/Authentication/IsLoggedIn"
+    )
       .then((res) => {
-        dispatch(setAuthentication({ authanticated: true }));
+        dispatch(
+          setAuthentication({ authanticated: true, isAdmin: res.data.isAdmin })
+        );
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  // const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const logout = () => {
-    dispatch(setAuthentication({ authanticated: false }));
-    localStorage.setItem("accessToken", "");
-    localStorage.setItem("refreshToken", "");
-    setAnchorEl(null);
-  };
+  // const logout = () => {
+  //   dispatch(setAuthentication({ authanticated: false, isAdmin: false }));
+  //   localStorage.setItem("accessToken", "");
+  //   localStorage.setItem("refreshToken", "");
+  //   setAnchorEl(null);
+  // };
 
   return (
     <>
       <CssBaseline />
-      <AppBar position="relative">
+      {/* <AppBar position="relative">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box
             sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
@@ -105,7 +109,8 @@ const Navigation = () => {
             </>
           )}
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
+      <MyAppBar />
       <Box
         sx={{
           display: "flex",

@@ -5,9 +5,11 @@ import Movie from "./routes/Movie/Movie.routes";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
 import Login from "./routes/Login/Login.routes";
-import useAxiosInterceptor from "./hooks/useAxiosInterceptor";
-import useTryLogin from "./hooks/useTryLogin";
 import { useEffect } from "react";
+import AdminHome from "./routes/Admin/Home/admin.home.routes";
+import ProtectedAdminRoutes from "./routes/ProtectedRoutes/protected.admin.routes";
+import AdminAddMovie from "./routes/Admin/AddMovie/Admin.add.movie.routes";
+import AdminDetailedMovie from "./routes/Admin/DetailedMovie/Admin.detailed.movie.routes";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,18 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/admin",
+        element: <ProtectedAdminRoutes children={<AdminHome />} />,
+      },
+      {
+        path: "/admin/add-movie",
+        element: <ProtectedAdminRoutes children={<AdminAddMovie />} />,
+      },
+      {
+        path: "admin/movies/:imdb_id",
+        element: <ProtectedAdminRoutes children={<AdminDetailedMovie />} />,
       },
     ],
   },

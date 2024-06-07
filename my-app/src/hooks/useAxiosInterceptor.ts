@@ -54,6 +54,7 @@ const useAxiosInterceptor = () => {
               const res = await axios.get<{
                 accessToken: string;
                 refreshToken: string;
+                isAdmin: boolean;
               }>("https://localhost:7209/api/Authentication/RefreshToken", {
                 params: { token: refreshToken },
               });
@@ -61,7 +62,12 @@ const useAxiosInterceptor = () => {
               console.log(res.data);
               localStorage.setItem("accessToken", res.data.accessToken);
               localStorage.setItem("refreshToken", res.data.refreshToken);
-              dispatch(setAuthentication({ authanticated: true }));
+              dispatch(
+                setAuthentication({
+                  authanticated: true,
+                  isAdmin: res.data.isAdmin,
+                })
+              );
               error.config.headers["Authorization"] =
                 "Bearer " + res.data.accessToken;
 
@@ -71,7 +77,9 @@ const useAxiosInterceptor = () => {
               throw err;
             }
           } else {
-            dispatch(setAuthentication({ authanticated: false }));
+            dispatch(
+              setAuthentication({ authanticated: false, isAdmin: false })
+            );
           }
         }
         console.log("En dışa girmemeli");

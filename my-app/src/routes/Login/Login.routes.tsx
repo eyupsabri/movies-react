@@ -43,8 +43,11 @@ const Login = () => {
       .then((res) => {
         localStorage.setItem("accessToken", res.data.accessToken);
         localStorage.setItem("refreshToken", res.data.refreshToken);
-        dispatch(setAuthentication({ authanticated: true }));
-        navigate(-1);
+        dispatch(
+          setAuthentication({ authanticated: true, isAdmin: res.data.isAdmin })
+        );
+        !res.data.isAdmin && navigate(-1);
+        res.data.isAdmin && navigate("/admin");
       })
       .catch((err) => {
         console.log(err);
