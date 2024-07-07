@@ -16,18 +16,22 @@ import { Year } from "../../enums/Year.enum";
 import { AppDispatch, RootState } from "../../state/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setMovieFilter } from "../../state/movieFilterSlice/movieFilterSlice";
-import MoviesService from "../../services/MoviesService";
-import { setMovies } from "../../state/moviesSlice/moviesSlice";
+import { MovieFilterType } from "../../types/MovieFilter.type";
 
-const MovieFilter = () => {
+type MovieFilterProps = {
+  onSearch: () => void;
+  defaultFilter?: MovieFilterType;
+};
+
+const MovieFilter = ({ onSearch, defaultFilter }: MovieFilterProps) => {
   const theme = useTheme();
   const classes = useStyles(theme);
   const dispatch = useDispatch<AppDispatch>();
   const movieFilter = useSelector((state: RootState) => state.movieFilter);
-  // const [rating, setRating] = useState("");
-  // const [userRating, setUserRating] = useState("");
-  // const [genre, setGenre] = useState<Genre>(Genre.None);
-  // const [year, setYear] = useState<Year>(Year.None);
+
+  if (defaultFilter?.imdBstar) {
+    dispatch(setMovieFilter(defaultFilter));
+  }
 
   const handleIMDBRating = (value: string) => {
     dispatch(
@@ -57,15 +61,7 @@ const MovieFilter = () => {
     dispatch(setMovieFilter({ ...movieFilter, year: value as Year }));
   };
   const searchMovies = () => {
-    console.log("movie filter user rating ", movieFilter.userRating);
-    MoviesService.getMovies(movieFilter)
-      .then((response) => {
-        console.log(response.data);
-        dispatch(setMovies(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    onSearch();
   };
 
   return (

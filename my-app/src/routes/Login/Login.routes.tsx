@@ -51,6 +51,7 @@ const Login = () => {
       })
       .catch((err) => {
         console.log(err);
+        dispatch(setAuthentication({ authanticated: false, isAdmin: false }));
       });
   };
 

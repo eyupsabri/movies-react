@@ -18,22 +18,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
 import { setMovies } from "../../state/moviesSlice/moviesSlice";
 
-const Movies = () => {
+type MoviesProps = {
+  movies: MovieType[];
+};
+
+const Movies = ({ movies }: MoviesProps) => {
   const theme = useTheme();
   const classes = useStyles(theme);
-  const dispatch = useDispatch<AppDispatch>();
-  const movieFilter = useSelector((state: RootState) => state.movieFilter);
-  const movies = useSelector((state: RootState) => state.movies.movies);
-  useEffect(() => {
-    MoviesService.getMovies(movieFilter)
-      .then((response) => {
-        // console.log(response.data);
-        dispatch(setMovies(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   return (
     <Container sx={classes.cardGrid} maxWidth="md">

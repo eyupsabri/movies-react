@@ -21,6 +21,7 @@ import { API_INSTANCE } from "../../services/BaseService";
 import { AccountCircleOutlined } from "@mui/icons-material";
 import { setAuthentication } from "../../state/authSlice/authSlice";
 import MyAppBar from "../../components/appBar/appBar.component";
+import AlertDialog from "../../components/alertDialog/alert.dialog.component";
 
 const Navigation = () => {
   const theme = useTheme();
@@ -30,20 +31,28 @@ const Navigation = () => {
   // );
   const dispatch = useDispatch<AppDispatch>();
   // useTryLogin();
+  console.log("Navigasyon mu önce");
   useAxiosInterceptor();
   useEffect(() => {
     console.log("Kaç kere request gidiyor ya");
-    API_INSTANCE.get<{ isAdmin: boolean }>(
-      "https://localhost:7209/api/Authentication/IsLoggedIn"
-    )
-      .then((res) => {
-        dispatch(
-          setAuthentication({ authanticated: true, isAdmin: res.data.isAdmin })
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const inner = async () => {
+      await API_INSTANCE.get<{ isAdmin: boolean }>(
+        "https://localhost:7209/api/Authentication/IsLoggedIn"
+      )
+        .then((res) => {
+          dispatch(
+            setAuthentication({
+              authanticated: true,
+              isAdmin: res.data.isAdmin,
+            })
+          );
+          //console.log("is admin", res.data.isAdmin);
+        })
+        .catch((err) => {
+          dispatch(setAuthentication({ authanticated: false, isAdmin: false }));
+        });
+    };
+    inner();
   }, []);
 
   // const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -156,6 +165,7 @@ const Navigation = () => {
           </Container>
         </Box>
         <Movies /> */}
+          <AlertDialog />
           <Outlet />
         </main>
         <footer

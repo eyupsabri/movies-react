@@ -5,6 +5,7 @@ import { RootState } from "../../../state/store";
 import MovieCard from "../../../components/movieCard/movieCard.component";
 import { useState } from "react";
 import { useStyles } from "./Admin.add.movie.styles";
+import useLoggedOut from "../../../hooks/useLoggedOut";
 
 const AdminAddMovie = () => {
   const theme = useTheme();
@@ -23,6 +24,7 @@ const AdminAddMovie = () => {
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
+  useLoggedOut();
 
   return (
     <>
@@ -35,6 +37,7 @@ const AdminAddMovie = () => {
             <MovieCard key={movie.imdb_id} movieID={movie.imdb_id} />
           ))}
         </Grid>
+
         <Pagination
           count={Math.ceil(movieIds.length / itemsPerPage)}
           page={page}

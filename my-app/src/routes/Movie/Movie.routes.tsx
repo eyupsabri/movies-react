@@ -22,7 +22,7 @@ import { Add, Height, Star, Widgets } from "@mui/icons-material";
 import { MovieReviewType } from "../../types/MovieReview.type";
 import YouTube from "react-youtube";
 import { MovieReviewAddType } from "../../types/MovieReviewAdd.type";
-import MovieReviewService from "../../services/MovieReviewService";
+import MovieWithAuthService from "../../services/MovieWithAuthService";
 import AddMovieReview from "../../components/addMovieReview/addMovieReview.component";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
@@ -103,7 +103,7 @@ const Movie = () => {
       movieID: params.movieID,
       created: new Date(),
     };
-    await MovieReviewService.addMovieReview(addReview)
+    await MovieWithAuthService.addMovieReview(addReview)
       .then((response) => {
         console.log("Review added movieleri çekicek");
         return MoviesService.getMovieByID(params.movieID as string);

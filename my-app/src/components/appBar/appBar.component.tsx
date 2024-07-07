@@ -25,8 +25,9 @@ const MyAppBar = () => {
   const authanticated = useSelector<RootState>(
     (state) => state.auth.authanticated
   );
-  const isAdmin = useSelector<RootState>((state) => state.auth.isAdmin);
-
+  // const isAdmin = useSelector<RootState>((state) => state.auth.isAdmin);
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  console.log("isAdmin app bar storage", isAdmin);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const logout = () => {
     dispatch(setAuthentication({ authanticated: false, isAdmin: false }));

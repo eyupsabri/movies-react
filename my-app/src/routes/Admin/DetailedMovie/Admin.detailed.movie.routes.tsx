@@ -5,6 +5,7 @@ import { MovieFromAPIType } from "../../../types/MovieFromAPIType";
 import { useEffect, useState } from "react";
 import MoviesDatabaseService from "../../../services/MoviesDatabaseService";
 import { useParams } from "react-router-dom";
+import useLoggedOut from "../../../hooks/useLoggedOut";
 
 const AdminDetailedMovie = () => {
   const params = useParams<{ imdb_id: string }>();
@@ -22,6 +23,7 @@ const AdminDetailedMovie = () => {
       });
     }
   }, [params.imdb_id]);
+  useLoggedOut();
 
   return (
     <Container maxWidth="md" sx={{ mt: 10 }}>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { API_INSTANCE } from "../services/BaseService";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -30,26 +30,6 @@ const useAxiosInterceptor = () => {
           if (error.response.data === "Refresh Token") {
             console.log("Refresh Token");
             const refreshToken = localStorage.getItem("refreshToken");
-            // await axios
-            //   .get<{ accessToken: string; refreshToken: string }>(
-            //     "https://localhost:7209/api/Authentication/RefreshToken",
-            //     {
-            //       params: { token: refreshToken },
-            //     }
-            //   )
-            //   .then((res) => {
-            //     console.log(res.data);
-            //     localStorage.setItem("accessToken", res.data.accessToken);
-            //     localStorage.setItem("refreshToken", res.data.refreshToken);
-            //     dispatch(setAuthentication({ authanticated: true }));
-            //     error.config.headers["Authorization"] =
-            //       "Bearer " + res.data.accessToken;
-            //     return axios(error.config);
-            //   })
-            //   .catch((err) => {
-            //     console.log(err);
-            //     return Promise.reject(err);
-            //   });
             try {
               const res = await axios.get<{
                 accessToken: string;
