@@ -30,9 +30,9 @@ const MyAppBar = () => {
   console.log("isAdmin app bar storage", isAdmin);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const logout = () => {
-    dispatch(setAuthentication({ authanticated: false, isAdmin: false }));
     localStorage.setItem("accessToken", "");
     localStorage.setItem("refreshToken", "");
+    dispatch(setAuthentication({ authanticated: false, isAdmin: false }));
     setAnchorEl(null);
   };
   return (

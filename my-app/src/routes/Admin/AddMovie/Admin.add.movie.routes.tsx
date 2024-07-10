@@ -24,7 +24,7 @@ const AdminAddMovie = () => {
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
-  useLoggedOut();
+  //useLoggedOut();
 
   return (
     <>

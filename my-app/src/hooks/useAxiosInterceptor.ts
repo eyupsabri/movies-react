@@ -7,7 +7,7 @@ import { setAuthentication } from "../state/authSlice/authSlice";
 
 const useAxiosInterceptor = () => {
   const dispatch = useDispatch<AppDispatch>();
-  useEffect(() => {
+  useMemo(() => {
     API_INSTANCE.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem("accessToken");

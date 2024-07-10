@@ -16,7 +16,7 @@ import { Link, Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
 import useAxiosInterceptor from "../../hooks/useAxiosInterceptor";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { API_INSTANCE } from "../../services/BaseService";
 import { AccountCircleOutlined } from "@mui/icons-material";
 import { setAuthentication } from "../../state/authSlice/authSlice";
@@ -33,8 +33,7 @@ const Navigation = () => {
   // useTryLogin();
   console.log("Navigasyon mu önce");
   useAxiosInterceptor();
-  useEffect(() => {
-    console.log("Kaç kere request gidiyor ya");
+  useMemo(() => {
     const inner = async () => {
       await API_INSTANCE.get<{ isAdmin: boolean }>(
         "https://localhost:7209/api/Authentication/IsLoggedIn"
@@ -46,9 +45,10 @@ const Navigation = () => {
               isAdmin: res.data.isAdmin,
             })
           );
-          //console.log("is admin", res.data.isAdmin);
+          console.log("loggedIn?? is admin", res.data.isAdmin);
         })
         .catch((err) => {
+          console.log("error hiç çalışıyor mu", err);
           dispatch(setAuthentication({ authanticated: false, isAdmin: false }));
         });
     };

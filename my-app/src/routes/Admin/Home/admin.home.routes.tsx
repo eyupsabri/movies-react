@@ -30,7 +30,8 @@ const AdminHome = () => {
   //   genre: searchParams.get("genre") as any,
   //   userRating: searchParams.get("userRating") as any,
   // };
-  useLoggedOut();
+
+  // useLoggedOut();
   useEffect(() => {
     // axios
     //   .get("https://localhost:7209/api/admin")
@@ -51,8 +52,7 @@ const AdminHome = () => {
 
   const handlePageChange = (pageIndex: number) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-
-    MoviesService.getMovies(movieFilter, 0)
+    MoviesService.getMovies(movieFilter, pageIndex - 1)
       .then((response) => {
         console.log(response.data);
         dispatch(setMovies(response.data.movies));
@@ -67,6 +67,7 @@ const AdminHome = () => {
   };
 
   const onSearch = () => {
+    console.log(movieFilter);
     // const searchParams = new URLSearchParams();
     // Object.entries(movieFilter).forEach(([key, value]) => {
     //   if (value !== undefined && value !== null && value !== "") {
@@ -74,7 +75,8 @@ const AdminHome = () => {
     //   }
     // });
     // setSearchParams(searchParams);
-    MoviesService.getMovies(movieFilter, paging.pageIndex)
+    // console.log("search params", searchParams);
+    MoviesService.getMovies(movieFilter, 0)
       .then((response) => {
         console.log(response.data);
         dispatch(setMovies(response.data.movies));

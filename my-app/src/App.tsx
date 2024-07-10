@@ -28,15 +28,16 @@ const router = createBrowserRouter([
       {
         path: "/admin",
         element: <ProtectedAdminRoutes children={<AdminHome />} />,
+        //element: <AdminHome />,
       },
       {
         path: "/admin/add-movie",
         element: <ProtectedAdminRoutes children={<AdminAddMovie />} />,
       },
-      {
-        path: "admin/movies/:imdb_id",
-        element: <ProtectedAdminRoutes children={<AdminDetailedMovie />} />,
-      },
+      // {
+      //   path: "admin/movies/:imdb_id",
+      //   element: <ProtectedAdminRoutes children={<AdminDetailedMovie />} />,
+      // },
     ],
   },
 ]);

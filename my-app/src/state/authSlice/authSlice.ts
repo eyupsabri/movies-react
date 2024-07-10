@@ -7,7 +7,7 @@ type AuthState = {
 
 const initialState: AuthState = {
   authanticated: false,
-  isAdmin: false,
+  isAdmin: localStorage.getItem("isAdmin") === "true",
 };
 
 const authSlice = createSlice({
