@@ -1,29 +1,26 @@
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, Slide, Typography, useTheme } from "@mui/material";
 import { useStyles } from "./onMouseOverMovie.styles";
 import { Link } from "react-router-dom";
+import { useRef } from "react";
 
 type OnMouseOverMovieProps = {
   movieCategories: string[];
   rating: number;
   id: string;
+  slideAnimation: boolean;
 };
 
 const OnMouseOverMovie = ({
   movieCategories,
   rating,
   id,
+  slideAnimation,
 }: OnMouseOverMovieProps) => {
   const theme = useTheme();
   const classes = useStyles(theme);
+  const boxRef = useRef<HTMLDivElement>(null);
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        height: "70%",
-      }}
-    >
+    <Box sx={classes.container} ref={boxRef}>
       <Box>
         <Typography variant="h5" color={"white"} textAlign={"center"}>
           IMDB Rating
@@ -42,14 +39,23 @@ const OnMouseOverMovie = ({
             );
         })}
       </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        component={Link}
-        to={`/movies/${id}`}
+      <Slide
+        direction="up"
+        in={slideAnimation}
+        mountOnEnter
+        unmountOnExit
+        container={boxRef.current}
+        timeout={500}
       >
-        View
-      </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          component={Link}
+          to={`/movies/${id}`}
+        >
+          View
+        </Button>
+      </Slide>
     </Box>
   );
 };

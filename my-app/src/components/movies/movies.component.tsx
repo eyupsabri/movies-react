@@ -10,6 +10,7 @@ import {
   useTheme,
   Grow,
   Box,
+  Fade,
 } from "@mui/material";
 import { useStyles } from "./movies.styles";
 import { MovieType } from "../../types/Movie.type";
@@ -65,15 +66,18 @@ const Movies = ({ movies }: MoviesProps) => {
                     onMouseOver={() => handleMouseOver(index)}
                     onMouseOut={() => handleMouseOut(index)}
                   >
-                    {isHovered[index] && (
+                    <Fade in={isHovered[index]}>
+                      {/* {isHovered[index] && ( */}
                       <Box sx={classes.onMouseOver}>
                         <OnMouseOverMovie
                           movieCategories={movie.movieCategories}
                           rating={movie.imdBstar}
                           id={movie.id}
+                          slideAnimation={isHovered[index]}
                         />
                       </Box>
-                    )}
+                      {/* )} */}
+                    </Fade>
                   </CardMedia>
                   <CardContent sx={classes.cardContent}>
                     <Typography variant="h5" gutterBottom>
