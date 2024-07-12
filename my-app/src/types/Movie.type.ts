@@ -10,4 +10,5 @@ export type MovieType = {
   bannerURL: string;
   plot: string;
   movieLength: number;
+  movieCategories: string[];
 };
