@@ -13,7 +13,7 @@ import { AppDispatch, RootState } from "../../state/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthentication } from "../../state/authSlice/authSlice";
 import { useStyles } from "./Login.styles";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const theme = useTheme();
@@ -127,6 +127,9 @@ const Login = () => {
         >
           Login
         </Button>
+        <Typography sx={{ mt: 2 }} align="center">
+          Don't have an account? <Link to="/register">Register</Link>
+        </Typography>
       </Box>
       {/* {authenticated ? <Navigate to="/" /> : null} */}
     </Container>

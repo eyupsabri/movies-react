@@ -67,7 +67,6 @@ const Movies = ({ movies }: MoviesProps) => {
                     onMouseOut={() => handleMouseOut(index)}
                   >
                     <Fade in={isHovered[index]}>
-                      {/* {isHovered[index] && ( */}
                       <Box sx={classes.onMouseOver}>
                         <OnMouseOverMovie
                           movieCategories={movie.movieCategories}
@@ -76,7 +75,6 @@ const Movies = ({ movies }: MoviesProps) => {
                           slideAnimation={isHovered[index]}
                         />
                       </Box>
-                      {/* )} */}
                     </Fade>
                   </CardMedia>
                   <CardContent sx={classes.cardContent}>

@@ -10,6 +10,7 @@ import AdminHome from "./routes/Admin/Home/admin.home.routes";
 import ProtectedAdminRoutes from "./routes/ProtectedRoutes/protected.admin.routes";
 import AdminAddMovie from "./routes/Admin/AddMovie/Admin.add.movie.routes";
 import AdminDetailedMovie from "./routes/Admin/DetailedMovie/Admin.detailed.movie.routes";
+import Register from "./routes/Register/Register.routes";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
       {
         path: "/admin",
