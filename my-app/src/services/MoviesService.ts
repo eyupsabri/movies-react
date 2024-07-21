@@ -17,6 +17,9 @@ class MoviesService {
   public async getMovieByID(id: string) {
     return this.api.get<MovieDetailedType>("/" + id);
   }
+  public async getMoviesWithQuery(query: string) {
+    return this.api.get<PagedMovieListType>("/?" + query);
+  }
 }
 
 export default new MoviesService();
