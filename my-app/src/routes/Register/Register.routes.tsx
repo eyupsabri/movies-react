@@ -22,6 +22,9 @@ import { RegisterType } from "../../types/Register.type";
 import AuthService from "../../services/AuthService";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../state/store";
+import { setAlert } from "../../state/alertSlice/alertSlice";
 
 const MySchema = Yup.object({
   password: Yup.string()
@@ -48,6 +51,7 @@ const MySchema = Yup.object({
 const Register = () => {
   const theme = useTheme();
   const classes = useStyles(theme);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
@@ -88,7 +92,7 @@ const Register = () => {
         console.log(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        dispatch(setAlert({ message: err.response.data, type: "default" }));
       });
   };
   return (

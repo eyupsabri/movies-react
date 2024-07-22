@@ -23,7 +23,7 @@ const AdminDetailedMovie = () => {
       });
     }
   }, [params.imdb_id]);
-  useLoggedOut();
+  // useLoggedOut();
 
   return (
     <Container maxWidth="md" sx={{ mt: 10 }}>
