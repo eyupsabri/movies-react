@@ -25,6 +25,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../state/store";
 import { setAlert } from "../../state/alertSlice/alertSlice";
+import { setAuthentication } from "../../state/authSlice/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const MySchema = Yup.object({
   password: Yup.string()
@@ -52,6 +54,7 @@ const Register = () => {
   const theme = useTheme();
   const classes = useStyles(theme);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
@@ -79,17 +82,24 @@ const Register = () => {
     password: string;
     name: string;
   }) => {
-    console.log(data);
     const registerData: RegisterType = {
       email: data.email,
       password: data.password,
       name: data.name,
-      isAdmin: isAdmin,
+      IsAdmin: isAdmin,
       birthdate: selectedDate,
     };
+    console.log(registerData);
     AuthService.register(registerData)
       .then((res) => {
         console.log(res.data);
+        localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
+        dispatch(
+          setAuthentication({ authanticated: true, isAdmin: res.data.isAdmin })
+        );
+        !res.data.isAdmin && navigate("/");
+        res.data.isAdmin && navigate("/admin");
       })
       .catch((err) => {
         dispatch(setAlert({ message: err.response.data, type: "default" }));

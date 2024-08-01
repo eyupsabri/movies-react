@@ -4,6 +4,6 @@ export type RegisterType = {
   email: string;
   password: string;
   name: string;
-  isAdmin: boolean;
+  IsAdmin: boolean;
   birthdate: Dayjs | null;
 };
