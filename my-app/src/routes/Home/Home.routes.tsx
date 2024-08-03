@@ -21,6 +21,8 @@ import { useSearchParams } from "react-router-dom";
 import { MovieFilterType } from "../../types/MovieFilter.type";
 import { setMovieFilter } from "../../state/movieFilterSlice/movieFilterSlice";
 import useLoggedOut from "../../hooks/useLoggedOut";
+import { Genre } from "../../enums/Genre.enum";
+import { Year } from "../../enums/Year.enum";
 
 // type MovieFilterType = {
 //   Title?: string;
@@ -53,21 +55,23 @@ const Home = () => {
   // };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams();
-    searchParams.set("sortBy", "imdbStar");
-    setSearchParams(searchParams);
+    const defaultSearchParams = new URLSearchParams();
+    if (!searchParams.toString()) {
+      defaultSearchParams.set("sortBy", "imdbStar");
+      setSearchParams(defaultSearchParams);
+    }
   }, []);
 
   useEffect(() => {
     console.log(`New search query: ${searchParams}`);
     const newMovieFilter: MovieFilterType = {
       Title: searchParams.get("Title") || "",
-      year: searchParams.get("year") as any,
-      imdBstar: searchParams.get("imdBstar") as any,
+      year: (searchParams.get("year") as Year) || Year.None,
+      imdBstar: searchParams.get("imdBstar") || "",
       sortBy: searchParams.get("sortBy") as any,
       sortAsc: searchParams.get("sortAsc") === "true",
-      genre: searchParams.get("genre") as any,
-      userRating: searchParams.get("userRating") as any,
+      genre: (searchParams.get("genre") as Genre) || Genre.None,
+      userRating: searchParams.get("userRating") || "",
     };
 
     console.log("new movie Filter", newMovieFilter);

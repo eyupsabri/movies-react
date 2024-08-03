@@ -3,10 +3,10 @@ import { Year } from "../enums/Year.enum";
 
 export type MovieFilterType = {
   Title?: string;
-  year?: Year;
-  imdBstar?: number;
+  year: Year;
+  imdBstar: string;
   sortBy: "imdbStar" | "year";
   sortAsc?: boolean;
-  genre?: Genre;
-  userRating?: number;
+  genre: Genre;
+  userRating: string;
 };

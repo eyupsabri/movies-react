@@ -73,6 +73,7 @@ const Movies = ({ movies }: MoviesProps) => {
                           rating={movie.imdBstar}
                           id={movie.id}
                           slideAnimation={isHovered[index]}
+                          type="user"
                         />
                       </Box>
                     </Fade>

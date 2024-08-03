@@ -9,6 +9,8 @@ const initialState: MovieFilterType = {
   // title: "",
   year: Year.None,
   genre: Genre.None,
+  imdBstar: "",
+  userRating: "",
 };
 
 const movieFilterSlice = createSlice({

@@ -8,4 +8,5 @@ export type MovieReviewType = {
   created: Date;
   userName: string;
   userNickName?: string;
+  userId: string;
 };

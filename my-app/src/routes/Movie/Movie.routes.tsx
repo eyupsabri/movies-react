@@ -52,13 +52,34 @@ const Movie = () => {
     return new Date(date).toLocaleDateString();
   };
 
+  function groupBy<T, K extends keyof any>(
+    array: T[],
+    key: (item: T) => K
+  ): Record<K, T[]> {
+    return array.reduce((result, currentItem) => {
+      const groupKey = key(currentItem);
+      if (!result[groupKey]) {
+        result[groupKey] = [];
+      }
+      result[groupKey].push(currentItem);
+      return result;
+    }, {} as Record<K, T[]>);
+  }
+
   const getStar = (reviews?: MovieReviewType[]) => {
     if (!reviews || reviews.length == 0) return "-";
     let sum = 0;
-    reviews.forEach((review) => {
-      sum += review.star;
-    });
-    return sum / reviews.length;
+    const groupedByUserId = groupBy(reviews, (review) => review.userId);
+    const groups = Object.keys(groupedByUserId);
+    for (let i = 0; i < groups.length; i++) {
+      const total = groupedByUserId[groups[i]].reduce(
+        (acc, review) => acc + review.star,
+        0
+      );
+
+      sum = total / groupedByUserId[groups[i]].length + sum;
+    }
+    return sum / groups.length;
   };
   console.log(movie?.trailerURL);
 

@@ -28,7 +28,7 @@ const MovieFilter = ({ onSearch, defaultFilter }: MovieFilterProps) => {
   const classes = useStyles(theme);
   const dispatch = useDispatch<AppDispatch>();
   const movieFilter = useSelector((state: RootState) => state.movieFilter);
-
+  console.log(movieFilter);
   if (defaultFilter?.imdBstar) {
     dispatch(setMovieFilter(defaultFilter));
   }
@@ -37,7 +37,8 @@ const MovieFilter = ({ onSearch, defaultFilter }: MovieFilterProps) => {
     dispatch(
       setMovieFilter({
         ...movieFilter,
-        imdBstar: value === "" ? undefined : parseInt(value),
+        // imdBstar: value === "" ? undefined : parseInt(value),
+        imdBstar: value,
       })
     );
   };
@@ -45,7 +46,8 @@ const MovieFilter = ({ onSearch, defaultFilter }: MovieFilterProps) => {
     dispatch(
       setMovieFilter({
         ...movieFilter,
-        userRating: value === "" ? undefined : parseInt(value),
+        // userRating: value === "" ? 0 : parseInt(value),
+        userRating: value,
       })
     );
   };
@@ -87,7 +89,7 @@ const MovieFilter = ({ onSearch, defaultFilter }: MovieFilterProps) => {
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
-              value={movieFilter.imdBstar?.toString()}
+              value={movieFilter.imdBstar}
               onChange={(event) => handleIMDBRating(event.target.value)}
               label="IMDB Rating"
             >
@@ -114,11 +116,11 @@ const MovieFilter = ({ onSearch, defaultFilter }: MovieFilterProps) => {
             <Select
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
-              value={movieFilter.userRating?.toString()}
+              value={movieFilter.userRating}
               onChange={(event) => handleUserRating(event.target.value)}
               label="User Rating"
             >
-              <MenuItem value="">
+              <MenuItem value={""}>
                 <em>None</em>
               </MenuItem>
               <MenuItem value={"1"}>1+</MenuItem>

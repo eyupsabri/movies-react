@@ -1,9 +1,11 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  Fade,
   Grid,
   Typography,
   useTheme,
@@ -20,6 +22,7 @@ import { Genre } from "../../enums/Genre.enum";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../state/store";
 import { setAlert } from "../../state/alertSlice/alertSlice";
+import OnMouseOverMovie from "../onMouseOverMovie/onMouseOverMovie.component";
 
 type MovieCardProps = {
   movieID: string;
@@ -29,6 +32,7 @@ const MovieCard = ({ movieID }: MovieCardProps) => {
   const classes = useStyles(theme);
   const [movie, setMovie] = useState<MovieFromAPIType>();
   const dispatch = useDispatch<AppDispatch>();
+  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   useEffect(() => {
     MoviesDatabaseService.getMovie(movieID)
@@ -77,10 +81,38 @@ const MovieCard = ({ movieID }: MovieCardProps) => {
       });
   };
 
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovered(false);
+  };
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card sx={classes.card}>
-        <CardMedia sx={classes.cardMedia} image={movie?.banner} />
+        {/* <CardMedia sx={classes.cardMedia} image={movie?.banner} /> */}
+        {movie && (
+          <CardMedia
+            sx={classes.cardMedia}
+            image={movie?.banner}
+            onMouseOver={() => handleMouseOver()}
+            onMouseOut={() => handleMouseOut()}
+          >
+            <Fade in={isHovered}>
+              <Box sx={classes.onMouseOver}>
+                <OnMouseOverMovie
+                  movieCategories={movie.gen.map((genre) => genre.genre)}
+                  rating={movie?.rating}
+                  id={movie?.imdb_id}
+                  slideAnimation={isHovered}
+                  type="admin"
+                />
+              </Box>
+            </Fade>
+          </CardMedia>
+        )}
+
         <CardContent sx={classes.cardContent}>
           <Typography variant="h5" gutterBottom>
             {movie?.title}
