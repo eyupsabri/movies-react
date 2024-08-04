@@ -106,7 +106,7 @@ const MovieCard = ({ movieID }: MovieCardProps) => {
                   rating={movie?.rating}
                   id={movie?.imdb_id}
                   slideAnimation={isHovered}
-                  type="admin"
+                  type="addMovie"
                 />
               </Box>
             </Fade>

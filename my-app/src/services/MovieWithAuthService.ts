@@ -15,6 +15,12 @@ class MovieWithAuthService extends BaseService {
   public async adminAddMovie(movieToAdd: MovieAddType) {
     return this.post("/Admin/AddMovie", movieToAdd);
   }
+  public async deleteMovieReview(reviewId: string) {
+    return this.delete(`/MovieReviews/DeleteReview/${reviewId}`);
+  }
+  public async deleteMovie(reviewId: string) {
+    return this.delete(`/Admin/DeleteMovie/${reviewId}`);
+  }
 }
 
 export default new MovieWithAuthService();

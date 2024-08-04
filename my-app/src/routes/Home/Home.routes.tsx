@@ -20,19 +20,8 @@ import { setMovies } from "../../state/moviesSlice/moviesSlice";
 import { useSearchParams } from "react-router-dom";
 import { MovieFilterType } from "../../types/MovieFilter.type";
 import { setMovieFilter } from "../../state/movieFilterSlice/movieFilterSlice";
-import useLoggedOut from "../../hooks/useLoggedOut";
 import { Genre } from "../../enums/Genre.enum";
 import { Year } from "../../enums/Year.enum";
-
-// type MovieFilterType = {
-//   Title?: string;
-//   year?: Year;
-//   imdBstar?: number;
-//   sortBy: "imdbStar" | "year";
-//   sortAsc?: boolean;
-//   genre?: Genre;
-//   userRating?: number;
-// };
 
 const Home = () => {
   const theme = useTheme();
@@ -43,16 +32,6 @@ const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
   const movieFilter = useSelector((state: RootState) => state.movieFilter);
   const movies = useSelector((state: RootState) => state.movies.movies);
-
-  // const newMovieFilter: MovieFilterType = {
-  //   Title: searchParams.get("Title") || undefined,
-  //   year: searchParams.get("year") as any,
-  //   imdBstar: searchParams.get("imdBstar") as any,
-  //   sortBy: searchParams.get("sortBy") as any,
-  //   sortAsc: searchParams.get("sortAsc") === "true",
-  //   genre: searchParams.get("genre") as any,
-  //   userRating: searchParams.get("userRating") as any,
-  // };
 
   useEffect(() => {
     const defaultSearchParams = new URLSearchParams();
@@ -88,35 +67,26 @@ const Home = () => {
       .catch((error) => {
         console.log(error);
       });
-    // MoviesService.getMovies(movieFilter, paging.pageIndex)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     dispatch(setMovies(response.data.movies));
-    //     setPaging({
-    //       pageIndex: response.data.pageIndex,
-    //       pageCount: response.data.pageCount,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }, [searchParams]);
+
+  const handleRefresh = async () => {
+    await MoviesService.getMoviesWithQuery(searchParams.toString())
+      .then((response) => {
+        console.log(response.data);
+        dispatch(setMovies(response.data.movies));
+        setPaging({
+          pageIndex: response.data.pageIndex,
+          pageCount: response.data.pageCount,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handlePageChange = (pageIndex: number) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     queryBuilder(pageIndex - 1);
-    // MoviesService.getMovies(movieFilter, pageIndex - 1)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     dispatch(setMovies(response.data.movies));
-    //     setPaging({
-    //       pageIndex: response.data.pageIndex,
-    //       pageCount: response.data.pageCount,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
 
   const queryBuilder = (pageIndex: number, sortBy?: "imdbStar" | "year") => {
@@ -138,19 +108,6 @@ const Home = () => {
 
   const onSearch = () => {
     queryBuilder(0);
-
-    // MoviesService.getMovies(movieFilter, 0)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     dispatch(setMovies(response.data.movies));
-    //     setPaging({
-    //       pageIndex: response.data.pageIndex,
-    //       pageCount: response.data.pageCount,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
 
   const handleSortByChange = (
@@ -163,21 +120,6 @@ const Home = () => {
         sortBy: event.target.value as "year" | "imdbStar",
       })
     );
-    // MoviesService.getMovies(
-    //   { ...movieFilter, sortBy: event.target.value as "year" | "imdbStar" },
-    //   0
-    // )
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     dispatch(setMovies(response.data.movies));
-    //     setPaging({
-    //       pageIndex: response.data.pageIndex,
-    //       pageCount: response.data.pageCount,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
 
   return (
@@ -212,7 +154,7 @@ const Home = () => {
           </Select>
         </FormControl>
       </Container>
-      <Movies movies={movies} />
+      <Movies movies={movies} type="default" handleRefresh={handleRefresh} />
       <Pagination
         count={paging.pageCount}
         page={paging.pageIndex + 1}

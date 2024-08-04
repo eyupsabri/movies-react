@@ -18,19 +18,24 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import VizSensor from "react-visibility-sensor";
 import OnMouseOverMovie from "../onMouseOverMovie/onMouseOverMovie.component";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
+import MovieWithAuthService from "../../services/MovieWithAuthService";
 
 type MoviesProps = {
   movies: MovieType[];
+  type: "addMovie" | "default";
+  handleRefresh?: () => void;
 };
 
-const Movies = ({ movies }: MoviesProps) => {
+const Movies = ({ movies, type, handleRefresh }: MoviesProps) => {
   const theme = useTheme();
   const classes = useStyles(theme);
   const [active, setActive] = useState<boolean[]>(new Array(12).fill(false));
   const [isHovered, setIsHovered] = useState<boolean[]>(
     new Array(12).fill(false)
   );
-
+  //const isAdmin = useSelector<RootState>((state) => state.auth.isAdmin);
   const handleMouseOver = (index: number) => {
     const newHovered = new Array(12).fill(false);
     newHovered[index] = true;
@@ -40,7 +45,13 @@ const Movies = ({ movies }: MoviesProps) => {
   const handleMouseOut = (index: number) => {
     setIsHovered(new Array(12).fill(false));
   };
+  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
+  const deleteMovie = async (id: string) => {
+    await MovieWithAuthService.deleteMovie(id).then((response) => {
+      if (response.status === 200) handleRefresh && handleRefresh();
+    });
+  };
   return (
     <Container sx={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>
@@ -73,7 +84,7 @@ const Movies = ({ movies }: MoviesProps) => {
                           rating={movie.imdBstar}
                           id={movie.id}
                           slideAnimation={isHovered[index]}
-                          type="user"
+                          type={type}
                         />
                       </Box>
                     </Fade>
@@ -84,15 +95,30 @@ const Movies = ({ movies }: MoviesProps) => {
                     </Typography>
                     <Typography>{movie.plot}</Typography>
                   </CardContent>
-                  <CardActions>
+                  <CardActions
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
                     <Button
                       component={Link}
                       size="small"
                       color="primary"
-                      to={`/movies/${movie.id}`}
+                      to={
+                        type === "addMovie"
+                          ? `/admin/movies/${movie.id}`
+                          : `/movies/${movie.id}`
+                      }
                     >
                       View
                     </Button>
+                    {isAdmin && (
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() => deleteMovie(movie.id)}
+                      >
+                        Delete
+                      </Button>
+                    )}
                   </CardActions>
                 </Card>
               </Grid>

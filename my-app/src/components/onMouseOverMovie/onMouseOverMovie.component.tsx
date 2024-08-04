@@ -8,7 +8,7 @@ type OnMouseOverMovieProps = {
   rating: number;
   id: string;
   slideAnimation: boolean;
-  type: "admin" | "user";
+  type: "default" | "addMovie";
 };
 
 const OnMouseOverMovie = ({
@@ -53,7 +53,7 @@ const OnMouseOverMovie = ({
           variant="contained"
           color="primary"
           component={Link}
-          to={type === "admin" ? `/admin/movies/${id}` : `/movies/${id}`}
+          to={type === "addMovie" ? `/admin/movies/${id}` : `/movies/${id}`}
         >
           View
         </Button>

@@ -26,6 +26,7 @@ import MovieWithAuthService from "../../services/MovieWithAuthService";
 import AddMovieReview from "../../components/addMovieReview/addMovieReview.component";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
+import Review from "../../components/reviews/review.component";
 
 const Movie = () => {
   const params = useParams<{ movieID: string }>();
@@ -36,7 +37,9 @@ const Movie = () => {
   const authenticated = useSelector<RootState>(
     (state) => state.auth.authanticated
   );
+
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     if (params.movieID) {
       MoviesService.getMovieByID(params.movieID)
         .then((response) => {
@@ -48,8 +51,16 @@ const Movie = () => {
     }
   }, [params.movieID]);
 
-  const dateToString = (date: Date) => {
-    return new Date(date).toLocaleDateString();
+  const handleRefresh = () => {
+    if (params.movieID) {
+      MoviesService.getMovieByID(params.movieID)
+        .then((response) => {
+          setMovie(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   function groupBy<T, K extends keyof any>(
@@ -81,36 +92,12 @@ const Movie = () => {
     }
     return sum / groups.length;
   };
-  console.log(movie?.trailerURL);
 
   const getVideoId = (url: string) => {
     const parts = url.split("/embed/");
     return parts.length > 1 ? parts[1] : undefined;
   };
 
-  // const onClickDeneme = async () => {
-  //   if (params.movieID == undefined) return;
-
-  //   const data: MovieReviewAddType = {
-  //     description:
-  //       "!lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure dolor reprehenderit voluptate velit esse cillum dolore fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident sunt culpa officia deserunt mollit anim id est laborum",
-  //     star: 10,
-  //     title: "Deneme",
-  //     movieID: params.movieID,
-  //     created: new Date(),
-  //   };
-  //   await MovieReviewService.addMovieReview(data)
-  //     .then((response) => {
-  //       console.log("Review added movieleri çekicek");
-  //       return MoviesService.getMovieByID(params.movieID as string);
-  //     })
-  //     .then((response) => {
-  //       setMovie(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log("Error e mi giriyor");
-  //     });
-  // };
   const onSubmit = async (data: {
     title: string;
     review: string;
@@ -219,41 +206,42 @@ const Movie = () => {
       <Box sx={{ mt: 5 }}>
         <Typography variant="h5">Reviews</Typography>
         {movie?.reviews.map((review, index) => (
-          <Card key={review.id} sx={{ mt: 1, px: 1 }}>
-            <CardContent>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  justifyContent: "flex-start",
-                }}
-              >
-                {/* <Typography>Created: {review.created}</Typography> */}
-                <Typography variant="subtitle1">Reviewed by:</Typography>
-                <Typography>{review.userName}</Typography>
-                <Box
-                  sx={{
-                    flexDirection: "row",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Star />
-                  <Typography>{review.star}/10</Typography>
-                </Box>
-              </Box>
-            </CardContent>
-            <CardHeader title={review.title} />
+          <Review review={review} key={index} handleRefresh={handleRefresh} />
+          // <Card key={review.id} sx={{ mt: 1, px: 1 }}>
+          //   <CardContent>
+          //     <Box
+          //       sx={{
+          //         display: "flex",
+          //         alignItems: "center",
+          //         gap: 2,
+          //         justifyContent: "flex-start",
+          //       }}
+          //     >
+          //       {/* <Typography>Created: {review.created}</Typography> */}
+          //       <Typography variant="subtitle1">Reviewed by:</Typography>
+          //       <Typography>{review.userName}</Typography>
+          //       <Box
+          //         sx={{
+          //           flexDirection: "row",
+          //           display: "flex",
+          //           alignItems: "center",
+          //           justifyContent: "center",
+          //         }}
+          //       >
+          //         <Star />
+          //         <Typography>{review.star}/10</Typography>
+          //       </Box>
+          //     </Box>
+          //   </CardContent>
+          //   <CardHeader title={review.title} />
 
-            <CardContent>
-              <Typography>{review.description}</Typography>
-              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <Typography>Created: {dateToString(review.created)}</Typography>
-              </Box>
-            </CardContent>
-          </Card>
+          //   <CardContent>
+          //     <Typography>{review.description}</Typography>
+          //     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          //       <Typography>Created: {dateToString(review.created)}</Typography>
+          //     </Box>
+          //   </CardContent>
+          // </Card>
         ))}
       </Box>
 

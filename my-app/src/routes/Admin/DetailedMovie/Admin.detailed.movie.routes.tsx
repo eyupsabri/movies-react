@@ -16,6 +16,7 @@ const AdminDetailedMovie = () => {
   };
   const [movie, setMovie] = useState<MovieFromAPIType>();
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     if (params.imdb_id) {
       MoviesDatabaseService.getMovie(params.imdb_id).then((response) => {
         setMovie(response.data.results);
