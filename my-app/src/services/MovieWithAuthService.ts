@@ -2,10 +2,11 @@ import { MovieType } from "../types/Movie.type";
 import { MovieAddType } from "../types/MovieAdd.type";
 import { MovieReviewAddType } from "../types/MovieReviewAdd.type";
 import BaseService from "./BaseService";
+const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
 class MovieWithAuthService extends BaseService {
   constructor() {
-    super("https://localhost:7209/api");
+    super(apiUrl + "api");
   }
 
   public async addMovieReview(review: MovieReviewAddType) {

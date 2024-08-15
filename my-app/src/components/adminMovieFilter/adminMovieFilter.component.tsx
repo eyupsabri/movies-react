@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, TextField, useTheme } from "@mui/material";
 import { useStyles } from "./adminMovieFilter.styles";
 import MoviesDatabaseService from "../../services/MoviesDatabaseService";
 import { AppDispatch, RootState } from "../../state/store";
@@ -17,23 +7,46 @@ import {
   setFilterTitle,
   setMovieIDs,
 } from "../../state/adminAddMoviesSlice/adminAddMoviesSlice";
+import { useState } from "react";
 
-const AdminMovieFilter = () => {
+type AdminMovieFilterProps = {
+  isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
+  setNotFound: (value: boolean) => void;
+};
+
+const AdminMovieFilter = ({
+  isLoading,
+  setIsLoading,
+  setNotFound,
+}: AdminMovieFilterProps) => {
   const theme = useTheme();
   const classes = useStyles(theme);
-  // const [title, setTitle] = useState("");
+
   const dispatch = useDispatch<AppDispatch>();
   const { title } = useSelector(
     (state: RootState) => state.adminAddMovies.filter
   );
 
   const searchMovies = () => {
+    setIsLoading(true);
+
     MoviesDatabaseService.getMoviesByTitle(title)
       .then((response) => {
+        if (response.data.results.length <= 0) {
+          console.error("No results found");
+          setNotFound(true);
+        } else {
+          setNotFound(false);
+        }
+        console.log(response);
         dispatch(setMovieIDs(response.data.results));
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -143,7 +156,7 @@ const AdminMovieFilter = () => {
       </Grid> */}
       <Box sx={classes.button_container}>
         <Button variant="contained" color="primary" onClick={searchMovies}>
-          Search
+          {isLoading ? "Loading..." : "Search"}
         </Button>
       </Box>
     </Box>

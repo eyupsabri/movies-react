@@ -8,6 +8,7 @@ import {
   InputLabel,
   FormControl,
   SelectChangeEvent,
+  Typography,
 } from "@mui/material";
 import Movies from "../../components/movies/movies.component";
 import { useStyles } from "./Home.styles";
@@ -155,6 +156,11 @@ const Home = () => {
         </FormControl>
       </Container>
       <Movies movies={movies} type="default" handleRefresh={handleRefresh} />
+      {movies.length === 0 && (
+        <Typography variant="h5" sx={{ mt: 5, textAlign: "center" }}>
+          ...No movies found
+        </Typography>
+      )}
       <Pagination
         count={paging.pageCount}
         page={paging.pageIndex + 1}

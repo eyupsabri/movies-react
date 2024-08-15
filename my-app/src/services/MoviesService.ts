@@ -2,10 +2,11 @@ import axios from "axios";
 import { MovieDetailedType } from "../types/MovieDetailed.type";
 import { MovieFilterType } from "../types/MovieFilter.type";
 import { PagedMovieListType } from "../types/PagedMovieList.type";
+const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
 class MoviesService {
   private api = axios.create({
-    baseURL: "https://localhost:7209/api/Movies",
+    baseURL: apiUrl + "api/Movies",
   });
 
   public async getMovies(filter: MovieFilterType, pageIndex: number) {

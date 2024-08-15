@@ -1,16 +1,4 @@
-import {
-  Typography,
-  AppBar,
-  CssBaseline,
-  Toolbar,
-  Box,
-  Button,
-  Popover,
-  IconButton,
-} from "@mui/material";
-import { PhotoCamera } from "@mui/icons-material";
-import { Login } from "@mui/icons-material";
-import { useStyles } from "./Navigation.styles";
+import { Typography, CssBaseline, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Link, Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,10 +6,11 @@ import { AppDispatch, RootState } from "../../state/store";
 import useAxiosInterceptor from "../../hooks/useAxiosInterceptor";
 import { useEffect, useMemo, useState } from "react";
 import { API_INSTANCE } from "../../services/BaseService";
-import { AccountCircleOutlined } from "@mui/icons-material";
 import { setAuthentication } from "../../state/authSlice/authSlice";
 import MyAppBar from "../../components/appBar/appBar.component";
 import AlertDialog from "../../components/alertDialog/alert.dialog.component";
+
+const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
 const Navigation = () => {
   const theme = useTheme();
@@ -36,7 +25,7 @@ const Navigation = () => {
   useMemo(() => {
     const inner = async () => {
       await API_INSTANCE.get<{ isAdmin: boolean }>(
-        "https://localhost:7209/api/Authentication/IsLoggedIn"
+        apiUrl + "api/Authentication/IsLoggedIn"
       )
         .then((res) => {
           dispatch(

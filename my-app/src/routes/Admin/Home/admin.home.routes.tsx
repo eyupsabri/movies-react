@@ -7,6 +7,7 @@ import {
   Pagination,
   Select,
   SelectChangeEvent,
+  Typography,
   useTheme,
 } from "@mui/material";
 import MovieFilter from "../../../components/movieFilter/movieFilter.component";
@@ -158,6 +159,11 @@ const AdminHome = () => {
         </FormControl>
       </Container>
       <Movies movies={movies} type="default" handleRefresh={handleRefresh} />
+      {movies.length === 0 && (
+        <Typography variant="h5" sx={{ mt: 5, textAlign: "center" }}>
+          ...No movies found
+        </Typography>
+      )}
       <Pagination
         count={paging.pageCount}
         page={paging.pageIndex + 1}

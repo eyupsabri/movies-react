@@ -1,4 +1,10 @@
-import { Container, Grid, Pagination, useTheme } from "@mui/material";
+import {
+  Container,
+  Grid,
+  Pagination,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import AdminMovieFilter from "../../../components/adminMovieFilter/adminMovieFilter.component";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
@@ -13,7 +19,8 @@ const AdminAddMovie = () => {
   const movieIds = useSelector(
     (state: RootState) => state.adminAddMovies.movies
   );
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   const [page, setPage] = useState(1);
   const itemsPerPage = 12;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -29,14 +36,26 @@ const AdminAddMovie = () => {
   return (
     <>
       <Container maxWidth="sm">
-        <AdminMovieFilter />
+        <AdminMovieFilter
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          setNotFound={setNotFound}
+        />
       </Container>
+
       <Container sx={classes.cardGrid} maxWidth="md">
-        <Grid container spacing={4}>
-          {paginatedMovies.map((movie) => (
-            <MovieCard key={movie.imdb_id} movieID={movie.imdb_id} />
-          ))}
-        </Grid>
+        {!notFound && (
+          <Grid container spacing={4}>
+            {paginatedMovies.map((movie) => (
+              <MovieCard key={movie.imdb_id} movieID={movie.imdb_id} />
+            ))}
+          </Grid>
+        )}
+        {notFound && (
+          <Typography variant="h5" sx={{ mt: 5, textAlign: "center" }}>
+            ...No movies found
+          </Typography>
+        )}
 
         <Pagination
           count={Math.ceil(movieIds.length / itemsPerPage)}

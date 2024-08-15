@@ -4,6 +4,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../state/store";
 import { setAuthentication } from "../state/authSlice/authSlice";
+const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
 const useAxiosInterceptor = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,7 +36,7 @@ const useAxiosInterceptor = () => {
                 accessToken: string;
                 refreshToken: string;
                 isAdmin: boolean;
-              }>("https://localhost:7209/api/Authentication/RefreshToken", {
+              }>(apiUrl + "api/Authentication/RefreshToken", {
                 params: { token: refreshToken },
               });
 
