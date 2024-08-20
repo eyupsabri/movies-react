@@ -12,7 +12,7 @@ const useAxiosInterceptor = () => {
     API_INSTANCE.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem("accessToken");
-        console.log("request interceptor" + config.url);
+        // console.log("request interceptor" + config.url);
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -29,7 +29,7 @@ const useAxiosInterceptor = () => {
       async (error) => {
         if (error.response.status === 401) {
           if (error.response.data === "Refresh Token") {
-            console.log("Refresh Token");
+            // console.log("Refresh Token");
             const refreshToken = localStorage.getItem("refreshToken");
             try {
               const res = await axios.get<{
@@ -40,7 +40,7 @@ const useAxiosInterceptor = () => {
                 params: { token: refreshToken },
               });
 
-              console.log(res.data);
+              // console.log(res.data);
               localStorage.setItem("accessToken", res.data.accessToken);
               localStorage.setItem("refreshToken", res.data.refreshToken);
               dispatch(
@@ -54,7 +54,7 @@ const useAxiosInterceptor = () => {
 
               return await API_INSTANCE.request(error.config);
             } catch (err) {
-              console.log(err);
+              // console.log(err);
               throw err;
             }
           } else {
@@ -63,7 +63,7 @@ const useAxiosInterceptor = () => {
             );
           }
         }
-        console.log("En dışa girmemeli");
+        // console.log("En dışa girmemeli");
         return Promise.reject(error);
       }
     );

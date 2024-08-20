@@ -89,10 +89,10 @@ const Register = () => {
       IsAdmin: isAdmin,
       birthdate: selectedDate,
     };
-    console.log(registerData);
+    // console.log(registerData);
     AuthService.register(registerData)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         localStorage.setItem("accessToken", res.data.accessToken);
         localStorage.setItem("refreshToken", res.data.refreshToken);
         dispatch(
@@ -162,7 +162,7 @@ const Register = () => {
             value={selectedDate}
             onChange={(newValue) => {
               setSelectedDate(newValue);
-              console.log(newValue);
+              // console.log(newValue);
             }}
             format="DD/MM/YYYY"
           />

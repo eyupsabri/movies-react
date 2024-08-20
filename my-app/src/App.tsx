@@ -5,7 +5,6 @@ import Movie from "./routes/Movie/Movie.routes";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
 import Login from "./routes/Login/Login.routes";
-import { useEffect } from "react";
 import AdminHome from "./routes/Admin/Home/admin.home.routes";
 import ProtectedAdminRoutes from "./routes/ProtectedRoutes/protected.admin.routes";
 import AdminAddMovie from "./routes/Admin/AddMovie/Admin.add.movie.routes";
@@ -47,9 +46,9 @@ const router = createBrowserRouter([
   },
 ]);
 function App() {
-  useEffect(() => {
-    console.log("App");
-  }, []);
+  // useEffect(() => {
+  //   console.log("App");
+  // }, []);
   return (
     <Provider store={store}>
       <RouterProvider router={router} />

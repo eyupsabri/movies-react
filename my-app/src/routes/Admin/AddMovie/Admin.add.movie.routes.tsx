@@ -40,6 +40,7 @@ const AdminAddMovie = () => {
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           setNotFound={setNotFound}
+          setPage={setPage}
         />
       </Container>
 

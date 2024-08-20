@@ -26,9 +26,10 @@ type MovieFilterProps = {
 const MovieFilter = ({ onSearch, defaultFilter }: MovieFilterProps) => {
   const theme = useTheme();
   const classes = useStyles(theme);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const movieFilter = useSelector((state: RootState) => state.movieFilter);
-  console.log(movieFilter);
+  // console.log(movieFilter);
   if (defaultFilter?.imdBstar) {
     dispatch(setMovieFilter(defaultFilter));
   }
@@ -62,10 +63,12 @@ const MovieFilter = ({ onSearch, defaultFilter }: MovieFilterProps) => {
   const handleYear = (value: string) => {
     dispatch(setMovieFilter({ ...movieFilter, year: value as Year }));
   };
-  const searchMovies = () => {
-    onSearch();
+  const searchMovies = async () => {
+    setLoading(true);
+    await onSearch();
+    setLoading(false);
   };
-
+  // console.log("loading ", loading);
   return (
     <Box sx={classes.container}>
       <TextField
@@ -182,7 +185,7 @@ const MovieFilter = ({ onSearch, defaultFilter }: MovieFilterProps) => {
       </Grid>
       <Box sx={classes.button_container}>
         <Button variant="contained" color="primary" onClick={searchMovies}>
-          Search
+          {loading ? "...Searching" : "Search"}
         </Button>
       </Box>
     </Box>

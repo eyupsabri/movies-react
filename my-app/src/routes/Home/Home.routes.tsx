@@ -29,6 +29,7 @@ const Home = () => {
   const classes = useStyles(theme);
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const [loading, setLoading] = useState(false);
   const [paging, setPaging] = useState({ pageIndex: 0, pageCount: 0 });
   const dispatch = useDispatch<AppDispatch>();
   const movieFilter = useSelector((state: RootState) => state.movieFilter);
@@ -43,7 +44,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log(`New search query: ${searchParams}`);
+    // console.log(`New search query: ${searchParams}`);
     const newMovieFilter: MovieFilterType = {
       Title: searchParams.get("Title") || "",
       year: (searchParams.get("year") as Year) || Year.None,
@@ -54,11 +55,18 @@ const Home = () => {
       userRating: searchParams.get("userRating") || "",
     };
 
-    console.log("new movie Filter", newMovieFilter);
+    // console.log("new movie Filter", newMovieFilter);
     dispatch(setMovieFilter({ ...newMovieFilter }));
+    setLoading(true);
+
+    const PageIndex = searchParams.get("pageIndex");
+    if (PageIndex) {
+      setPaging({ ...paging, pageIndex: parseInt(PageIndex) });
+    }
+
     MoviesService.getMoviesWithQuery(searchParams.toString())
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         dispatch(setMovies(response.data.movies));
         setPaging({
           pageIndex: response.data.pageIndex,
@@ -66,14 +74,17 @@ const Home = () => {
         });
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [searchParams]);
 
   const handleRefresh = async () => {
     await MoviesService.getMoviesWithQuery(searchParams.toString())
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         dispatch(setMovies(response.data.movies));
         setPaging({
           pageIndex: response.data.pageIndex,
@@ -81,17 +92,17 @@ const Home = () => {
         });
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
 
   const handlePageChange = (pageIndex: number) => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "auto" });
     queryBuilder(pageIndex - 1);
   };
 
   const queryBuilder = (pageIndex: number, sortBy?: "imdbStar" | "year") => {
-    console.log(movieFilter);
+    // console.log(movieFilter);
     const newMovieFilter: MovieFilterType = {
       ...movieFilter,
       sortBy: sortBy || movieFilter.sortBy,
@@ -104,7 +115,7 @@ const Home = () => {
     });
     searchParams.set("pageIndex", pageIndex.toString());
     setSearchParams(searchParams);
-    console.log("search params", searchParams);
+    // console.log("search params", searchParams);
   };
 
   const onSearch = () => {
@@ -155,8 +166,16 @@ const Home = () => {
           </Select>
         </FormControl>
       </Container>
-      <Movies movies={movies} type="default" handleRefresh={handleRefresh} />
-      {movies.length === 0 && (
+      {!loading && (
+        <Movies movies={movies} type="default" handleRefresh={handleRefresh} />
+      )}
+
+      {loading && (
+        <Typography variant="h5" sx={{ mt: 5, textAlign: "center" }}>
+          ...Loading
+        </Typography>
+      )}
+      {movies.length === 0 && !loading && (
         <Typography variant="h5" sx={{ mt: 5, textAlign: "center" }}>
           ...No movies found
         </Typography>

@@ -38,7 +38,7 @@ const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const onSubmit = (data: { email: string; password: string }) => {
-    console.log(data);
+    // console.log(data);
     AuthService.login(data.email, data.password)
       .then((res) => {
         localStorage.setItem("accessToken", res.data.accessToken);
@@ -50,7 +50,7 @@ const Login = () => {
         res.data.isAdmin && navigate("/admin");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatch(setAuthentication({ authanticated: false, isAdmin: false }));
       });
   };

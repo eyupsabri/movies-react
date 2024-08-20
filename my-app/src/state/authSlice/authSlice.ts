@@ -17,7 +17,7 @@ const authSlice = createSlice({
     setAuthentication: (state, action: PayloadAction<AuthState>) => {
       state.authanticated = action.payload.authanticated;
       state.isAdmin = action.payload.isAdmin;
-      console.log("is admin from state management", action.payload.isAdmin);
+      // console.log("is admin from state management", action.payload.isAdmin);
       localStorage.setItem("isAdmin", action.payload.isAdmin + "");
     },
   },

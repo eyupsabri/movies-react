@@ -20,7 +20,7 @@ const AdminDetailedMovie = () => {
     if (params.imdb_id) {
       MoviesDatabaseService.getMovie(params.imdb_id).then((response) => {
         setMovie(response.data.results);
-        console.log(response.data.results.gen);
+        // console.log(response.data.results.gen);
       });
     }
   }, [params.imdb_id]);

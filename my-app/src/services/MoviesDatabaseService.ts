@@ -27,7 +27,7 @@ class MoviesDatabaseService {
       (movie) => movie.imdb_id === imdb_id
     );
     if (cachedMovie) {
-      console.log("Movie found in cache");
+      // console.log("Movie found in cache");
       return Promise.resolve({ data: { results: cachedMovie } });
     }
     const response = await this.api.get(`/movie/id/${imdb_id}`);

@@ -20,7 +20,7 @@ const Navigation = () => {
   // );
   const dispatch = useDispatch<AppDispatch>();
   // useTryLogin();
-  console.log("Navigasyon mu önce");
+  // console.log("Navigasyon mu önce");
   useAxiosInterceptor();
   useMemo(() => {
     const inner = async () => {
@@ -34,10 +34,10 @@ const Navigation = () => {
               isAdmin: res.data.isAdmin,
             })
           );
-          console.log("loggedIn?? is admin", res.data.isAdmin);
+          // console.log("loggedIn?? is admin", res.data.isAdmin);
         })
         .catch((err) => {
-          console.log("error hiç çalışıyor mu", err);
+          // console.log("error hiç çalışıyor mu", err);
           dispatch(setAuthentication({ authanticated: false, isAdmin: false }));
         });
     };

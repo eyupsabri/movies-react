@@ -30,7 +30,7 @@ import Review from "../../components/reviews/review.component";
 
 const Movie = () => {
   const params = useParams<{ movieID: string }>();
-  console.log(params);
+  // console.log(params);
   const theme = useTheme();
   const classes = useStyles(theme);
   const [movie, setMovie] = useState<MovieDetailedType>();
@@ -46,7 +46,7 @@ const Movie = () => {
           setMovie(response.data);
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
         });
     }
   }, [params.movieID]);
@@ -58,7 +58,7 @@ const Movie = () => {
           setMovie(response.data);
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
         });
     }
   };
@@ -113,14 +113,14 @@ const Movie = () => {
     };
     await MovieWithAuthService.addMovieReview(addReview)
       .then((response) => {
-        console.log("Review added movieleri çekicek");
+        // console.log("Review added movieleri çekicek");
         return MoviesService.getMovieByID(params.movieID as string);
       })
       .then((response) => {
         setMovie(response.data);
       })
       .catch((error) => {
-        console.log("Error e mi giriyor");
+        // console.log("Error e mi giriyor");
       });
   };
 

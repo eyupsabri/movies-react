@@ -13,12 +13,14 @@ type AdminMovieFilterProps = {
   isLoading: boolean;
   setIsLoading: (value: boolean) => void;
   setNotFound: (value: boolean) => void;
+  setPage: (value: number) => void;
 };
 
 const AdminMovieFilter = ({
   isLoading,
   setIsLoading,
   setNotFound,
+  setPage,
 }: AdminMovieFilterProps) => {
   const theme = useTheme();
   const classes = useStyles(theme);
@@ -30,7 +32,7 @@ const AdminMovieFilter = ({
 
   const searchMovies = () => {
     setIsLoading(true);
-
+    setPage(1);
     MoviesDatabaseService.getMoviesByTitle(title)
       .then((response) => {
         if (response.data.results.length <= 0) {
@@ -39,7 +41,7 @@ const AdminMovieFilter = ({
         } else {
           setNotFound(false);
         }
-        console.log(response);
+        // console.log(response);
         dispatch(setMovieIDs(response.data.results));
       })
       .catch((error) => {

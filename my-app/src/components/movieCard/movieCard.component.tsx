@@ -63,10 +63,10 @@ const MovieCard = ({ movieID }: MovieCardProps) => {
         (genre) => +Genre[genre.genre as keyof typeof Genre]
       ),
     };
-    console.log(movieToAdd);
+    // console.log(movieToAdd);
     MovieWithAuthService.adminAddMovie(movieToAdd)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         dispatch(
           setAlert({
             message: "Movie added to database successfully",
